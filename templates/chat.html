@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Chat</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<div class="security-status">
+    <span class="secure">🔐 Encrypted</span>
+    <span class="online">🟢 Online</span>
+    <span class="csp">🛡️ CSP</span>
+    <span class="threat low">🚨 Low Risk</span>
+</div>
+<body>
+
+<div class="cyber-wrapper">
+
+  <div class="cyber-chat">
+
+    <!-- HEADER -->
+    <div class="cyber-header">
+      <div class="brand">
+        <img src="/static/images/logo.png">
+        <span>Chat Bud</span>
+      </div>
+
+      <div class="header-actions">
+    <a href="/admin">🛡️ Admin</a>
+    <a href="/logout" class="logout-btn">🚪 Logout</a>
+  <button class="theme-toggle">
+    <span class="icon">🌙</span>
+    <span class="label">Dark</span>
+  </button>
+  </div>
+
+    </div>
+
+    <!-- SECURITY INFO -->
+    <div class="secure-banner">
+      🔐 End-to-End Encrypted • Secure Channel Active
+    </div>
+
+    <!-- MESSAGES -->
+    <div id="messages" class="cyber-messages">
+        <div id="emptyChat" class="empty-chat">
+            🔐 Secure channel ready<br>
+        <span>Start a private conversation</span>
+</div>
+
+    </div>
+
+    <!-- TYPING -->
+    <div id="typing" class="typing-indicator"></div>
+
+    <!-- INPUT -->
+    <div class="cyber-input">
+      <input id="messageInput" placeholder="Secure message…">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+    const currentUser = "{{ username }}";
+</script>
+
+<script src="/static/js/chat.js"></script>
+
+<!-- 🌙 DARK MODE SCRIPT -->
+<script src="/static/js/theme.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Testing Lab</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="testing-page">
+
+    <div class="testing-header">
+        <h1>🧪 Security Testing Lab</h1>
+        <p>Internal cryptographic and system validation tools</p>
+    </div>
+
+    <div class="test-grid">
+
+        <!-- Encryption Test Card -->
+        <div class="test-card">
+            <div class="test-title">
+                <span>🔐 Encryption Integrity Test</span>
+                <span class="info-icon" onclick="openInfo('encryption')">ℹ</span>
+
+            </div>
+
+            <p class="test-desc">
+                Validates AES encryption, MAC verification, and decryption correctness.
+            </p>
+
+            <button id="runBtn" class="btn-primary" onclick="runEncryptionTest()">
+                ▶ Run Test
+            </button>
+
+            <div class="test-result">
+                <div>Status: <span id="enc-status" class="status neutral">Not Run</span></div>
+                <div>Time: <span id="enc-time">—</span></div>
+                <div id="enc-details" class="details"></div>
+            </div>
+        </div>
+
+        <!-- Tampering Attack Card -->
+        <div class="test-card danger-card">
+            <div class="test-title">
+                <span>⚠ Message Tampering Attack</span>
+                <span class="info-icon" onclick="openInfo('tamper')">ℹ</span>
+
+            </div>
+
+            <p class="test-desc">
+                Simulates ciphertext modification and verifies MAC failure.
+            </p>
+
+            <button class="btn-danger" onclick="runTamperTest()">
+                ⚠ Run Attack
+            </button>
+
+            <div class="test-result">
+                <div>Status: <span id="tamper-status" class="status neutral">Not Run</span></div>
+                <div>Time: <span id="tamper-time">—</span></div>
+                <div id="tamper-details" class="details"></div>
+            </div>
+        </div>
+
+        <!-- Coming Soon Card -->
+        <div class="test-card coming-card">
+            <div class="test-title">
+                🧨 Replay / MITM Simulation
+            </div>
+
+            <p class="test-desc">
+                Simulates replay attacks and man-in-the-middle interception to evaluate
+                nonce reuse protection and MAC integrity enforcement.
+            </p>
+
+            <button class="btn-disabled" disabled>
+                Coming Soon
+            </button>
+        </div>
+
+        <!-- Key Strength Test  -->
+        <div class="test-card">
+            <div class="test-title">
+                🔑 Key Strength Test
+                <span class="info-icon" onclick="openInfo('key')">ℹ</span>
+            </div>
+
+            <p class="test-desc">
+                 Analyzes AES key length and cryptographic strength.
+            </p>
+
+            <button class="run-btn" onclick="runKeyTest()">▶ Run Test</button>
+
+            <div class="test-output">
+                <p>Status: <span id="key-status">Not Run</span></p>
+                <p>Key Size: <span id="key-size">—</span></p>
+                <p>Strength: <span id="key-strength">—</span></p>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="history-box">
+        <h3>📜 Recent Runs</h3>
+        <ul id="historyList"></ul>
+    </div>
+
+    <div class="back-link">
+        <a href="/admin/dashboard">← Back to Dashboard</a>
+    </div>
+
+</div>
+
+<div id="infoModal" class="info-modal">
+  <div class="info-content">
+    <span class="close-btn" onclick="closeInfo()">×</span>
+    <h2 id="infoTitle"></h2>
+    <div id="infoBody"></div>
+  </div>
+</div>
+
+<script src="/static/js/testing_info.js"></script>
+<script src="/static/js/testing.js"></script>
+<!-- <script>
+function runEncryptionTest() {
+    const btn = document.getElementById("runBtn");
+    btn.textContent = "⏳ Running...";
+    btn.disabled = true;
+
+    fetch("/admin/testing/encryption")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("enc-status").textContent = data.status;
+            document.getElementById("enc-time").textContent = data.time + " ms";
+            document.getElementById("enc-details").textContent = data.details;
+
+            setStatus("enc-status", data.status);
+            btn.textContent = "▶ Run Test";
+            btn.disabled = false;
+            loadHistory();
+        });
+}
+
+function runTamperTest() {
+    fetch("/admin/testing/tamper")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("tamper-status").textContent = data.status;
+            document.getElementById("tamper-time").textContent = data.time + " ms";
+            document.getElementById("tamper-details").textContent = data.details;
+
+            setStatus("tamper-status", data.status);
+            loadHistory();
+        });
+}
+
+function setStatus(id, status) {
+    const el = document.getElementById(id);
+    el.className = "status " + (status === "PASS" ? "pass" : "fail");
+}
+
+function loadHistory() {
+    fetch("/admin/testing/history")
+        .then(res => res.json())
+        .then(data => {
+            const ul = document.getElementById("historyList");
+            ul.innerHTML = "";
+            data.reverse().forEach(t => {
+                ul.innerHTML += `
+                    <li>
+                        ${t.time} — 
+                        <b class="${t.status === 'PASS' ? 'pass' : 'fail'}">
+                            ${t.status}
+                        </b> (${t.ms} ms)
+                    </li>`;
+            });
+        });
+}
+</script> --> 
+
+</body>
+</html>

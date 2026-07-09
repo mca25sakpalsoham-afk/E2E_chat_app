@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Management</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="admin-page-wrapper">
+
+<div class="admin-dashboard">
+
+    <h2 class="dashboard-title">👥 User Management</h2>
+
+    <div class="user-table">
+        <div class="user-table-header">
+            <span>User</span>
+            <span>Failed Attempts</span>
+            <span>Last Login</span>
+            <span>Status</span>
+            <span>Action</span>
+        </div>
+
+        {% for user in users %}
+        <div class="user-table-row">
+            <span class="username">{{ user.username }}</span>
+
+            <span class="failed">
+                {{ user.failed_attempts }}
+            </span>
+
+            <span class="last-login">
+                {{ user.last_login or "Never" }}
+            </span>
+
+            <span>
+                {% if user.is_locked %}
+                    <span class="status locked">Locked</span>
+                {% else %}
+                    <span class="status active">Active</span>
+                {% endif %}
+            </span>
+
+            <span>
+                <a href="/admin/users/toggle/{{ user.id }}">
+                    <button class="action-btn {{ 'unlock' if user.is_locked else 'block' }}">
+                        {{ 'Unblock' if user.is_locked else 'Block' }}
+                    </button>
+                </a>
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align:center; margin-top:30px;">
+        <a href="/admin/dashboard" class="back-link">← Back to Dashboard</a>
+    </div>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with {{ chat_user }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+
+<div class="cyber-wrapper">
+    <div class="cyber-chat">
+
+        <!-- HEADER -->
+        <div class="cyber-header">
+            <strong>👤 {{ chat_user }}</strong>
+            <a href="/chats" class="logout-btn">Back</a>
+        </div>
+
+        <!-- MESSAGES -->
+        <div class="cyber-messages" id="messages">
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="message {% if msg.sender == session['user'] %}self{% else %}other{% endif %}">
+                        <div class="message-text">
+                            {{ msg.decrypted_message }}
+                        </div>
+                        <div class="message-time">
+                            {{ msg.timestamp.strftime('%H:%M') }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-chat" id="emptyChat">
+                    🔒 Secure channel ready<br>
+                    <span>Start a private conversation</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- INPUT -->
+        <div class="cyber-input">
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="Type a message…"
+                autocomplete="off"
+            />
+            <button id="sendBtn" type="button">Send</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- GLOBAL VARIABLES -->
+<script>
+    const CURRENT_USER = "{{ session['user'] }}";
+    const CHAT_USER = "{{ chat_user }}";
+</script>
+
+<!-- SOCKET LOGIC -->
+<script src="/static/js/private_chat.js"></script>
+
+</body>
+</html>

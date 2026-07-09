@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Logs – Chat Bud</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+<!-- THEME TOGGLE -->
+<div style="position: absolute; top: 20px; right: 20px;">
+    <button class="toggle" onclick="toggleTheme()">🌙 Dark</button>
+</div>
+
+<div class="auth-hero">
+    <div class="auth-card" style="width:600px; max-height:80vh; overflow-y:auto;">
+        <h2>📊 Security Audit Logs</h2>
+
+        <div style="font-size:12px; color:#ccc; margin-bottom:10px;">
+            Read-only system security events
+        </div>
+
+        <pre style="
+            background:#111;
+            color:#9ccc65;
+            padding:15px;
+            border-radius:10px;
+            font-size:12px;
+            text-align:left;
+            white-space:pre-wrap;
+        ">
+{% for log in logs %}
+{{ log }}
+{% endfor %}
+        </pre>
+
+        <!-- 🔽 PAGINATION CONTROLS -->
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="?page={{ page-1 }}" class="page-btn">⬅ Prev</a>
+            {% endif %}
+
+            <span class="page-info">
+                Page {{ page }} / {{ total_pages }}
+            </span>
+
+            {% if page < total_pages %}
+                <a href="?page={{ page+1 }}" class="page-btn">Next ➡</a>
+            {% endif %}
+        </div>
+
+        <div class="auth-footer">
+            <a href="/admin/dashboard">← Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/theme.js"></script>
+</body>
+</html>

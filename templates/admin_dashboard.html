@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard – Chat Bud</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<!-- THEME TOGGLE -->
+<div style="position: fixed; top: 20px; right: 20px; z-index: 999;">
+    <button class="theme-toggle">
+        <span class="icon">🌙</span>
+        <span class="label">Dark</span>
+    </button>
+</div>
+
+<div class="auth-hero">
+    <div class="auth-card" style="width:1250px;">
+
+        <h2>🛡️ Admin Dashboard</h2>
+        <p style="color:#ccc; font-size:13px;">
+            Security overview panel
+        </p>
+        {% if alert_message %}
+        <div class="security-alert {{ alert_level }}">
+            {{ alert_message }}
+        </div>
+        {% endif %}
+
+
+        <!-- DASHBOARD CARDS -->
+        <div class="dashboard-grid">
+
+            <div class="dash-card">
+                <h3>👥 Total Users</h3>
+                <span>{{ total_users }}</span>
+            </div>
+
+            <div class="dash-card">
+                <h3>🆕 Registrations Today</h3>
+                <span>{{ today_users }}</span>
+            </div>
+
+            <div class="dash-card danger">
+                <h3>🚫 Failed Logins</h3>
+                <span>{{ failed_logins }}</span>
+            </div>
+
+            <div class="dash-card">
+                <h3>🕒 Last Login</h3>
+                <small>{{ last_login }}</small>
+            </div>
+
+        </div>
+
+<hr style="margin:30px 0; opacity:0.2;">
+<div class="admin-divider"></div>
+<div class="dashboard-section">
+    <div class="dashboard-section-title">📊 Security Analytics</div>
+</div>
+
+<div class="dash-card">
+    <canvas id="spikeChart"></canvas>
+</div>
+
+
+<div class="dashboard-section">
+    <div class="dashboard-section-title">🕒 Recent Security Activity</div>
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="dash-card">
+        <canvas id="usersChart"></canvas>
+    </div>
+
+    <div class="dash-card">
+        <canvas id="loginChart"></canvas>
+    </div>
+    
+    <div class="activity-log">
+        {% for event in recent_events %}
+            <div class="activity-item">{{ event }}</div>
+        {% endfor %}
+    </div>
+</div>
+
+
+    <!-- ACTION BUTTONS -->
+    <div class="dashboard-actions">
+        <a href="/admin/logs">
+           <button class="login">📊 View Security Logs</button>
+        </a>
+        <a href="/chat">
+            <button class="register">💬 Back to Chat</button>
+        </a>
+        <a href="/admin/export/csv">
+            <button class="login">⬇ Export Logs (CSV)</button>
+        </a>
+        <a href="/admin/export/pdf">
+            <button class="register">⬇ Export Logs (PDF)</button>
+        </a>
+        <a href="/admin/users">
+            <button class="login">👥 Manage Users</button>
+        </a>
+        <a href="/admin/testing" class="admin-btn">
+            🧪 Security Testing Lab
+        </a>
+
+
+    </div>
+    </div>
+</div>
+<script src="/static/js/theme.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script id="dashboard-data" type="application/json">
+{
+    "totalUsers": {{ total_users | int }},
+    "todayUsers": {{ today_users | int }},
+    "successLogins": {{ success_logins | int }},
+    "failedLogins": {{ failed_logins | int }}
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const spikeDataEl = document.getElementById("spike-data");
+    if (!spikeDataEl) return;
+
+    const spikeData = JSON.parse(spikeDataEl.textContent);
+
+    const spikeCtx = document.getElementById("spikeChart");
+    if (!spikeCtx) return;
+
+    new Chart(spikeCtx, {
+        type: "line",
+        data: {
+            labels: spikeData.times,
+            datasets: [{
+                label: "Failed Logins (Spike Detection)",
+                data: spikeData.counts,
+                borderColor: "#ff5252",
+                backgroundColor: "rgba(255,82,82,0.25)",
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { labels: { color: "white" } }
+            },
+            scales: {
+                x: { ticks: { color: "white" } },
+                y: { ticks: { color: "white" } }
+            }
+        }
+    });
+
+});
+</script>
+
+<script id="spike-data" type="application/json">
+{
+    "times": {{ failed_times | tojson }},
+    "counts": {{ failed_counts | tojson }}
+}
+</script>
+
+<script src="/static/js/admin_dashboard.js"></script>
+
+</body>
+</html>

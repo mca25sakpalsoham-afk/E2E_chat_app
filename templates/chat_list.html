@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chats</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+
+<div class="auth-hero">
+    <div class="auth-card" style="width:420px;">
+
+        <h2>💬 Chats</h2>
+
+        <div class="chat-list">
+            {% for user in users %}
+            <a href="/chat/{{ user.username }}" class="chat-item">
+                <div class="avatar">👤</div>
+
+                <div class="chat-info">
+                    <div class="chat-name">
+                        {{ user.username }}
+                        <span class="badge"
+                              id="badge-{{ user.username }}"
+                              style="display:none">1</span>
+                    </div>
+                    <div class="chat-preview">
+                        Tap to start conversation
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="auth-footer">
+            <a href="/logout">Logout</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const socket = io();
+
+// Join personal room
+socket.emit("join", {
+    username: "{{ session['user'] }}"
+});
+
+// Show badge when message received
+socket.on("new_message", data => {
+    if (data.sender === "{{ session['user'] }}") return;
+
+    const badge = document.getElementById("badge-" + data.sender);
+    if (badge) {
+        badge.style.display = "inline-block";
+        badge.textContent = "1";
+    }
+});
+</script>
+
+</body>
+</html>
